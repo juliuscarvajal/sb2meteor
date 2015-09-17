@@ -1,0 +1,75 @@
+<head>
+  <title>sb2meteor</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+
+<body>
+  {{> locations}} {{> channels}}
+
+  <h3>Locations to Channels</h3>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+
+<template name="locations">
+  <h3>Locations</h3>
+  <p>
+    <button class="btn btn-default" ng-click="sync()">Sync</button>
+  </p>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-condensed table-hover">
+      <thead>
+        <th>*</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Location</th>
+      </thead>
+      <tbody>
+        {{#each Locations}} {{> location}} {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<template name="channels">
+  <h3>Channels</h3>
+  <p>
+    <button class="btn btn-default" ng-click="sync()">Sync</button>
+  </p>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-condensed table-hover">
+      <thead>
+        <th>ID</th>
+        <th>Name</th>
+      </thead>
+      <tbody>
+        {{#each Channels}} {{> channel}} {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<!-- Templates for specific row -->
+<template name="channel">
+  <tr>
+    <td>{{id}}</td>
+    <td>
+      <input type="edit" value="{{name}}" placeholder="{{name}}" />
+    </td>
+  </tr>
+</template>
+
+<template name="location">
+  <tr>
+    <td>{{editing}}</td>
+    <td>{{id}}</td>
+    <td>
+      <input type="edit" value="{{name}}" placeholder="{{name}}" />
+    </td>
+    <td>
+      <input type="edit" value="{{location}}" placeholder="{{location}}" />
+    </td>
+  </tr>
+</template>
