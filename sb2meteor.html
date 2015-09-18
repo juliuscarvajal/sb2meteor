@@ -24,7 +24,7 @@
   </p>
 
   <div>
-    <table class="ui celled striped table">
+    <table class="ui very basic celled striped table">
       <thead>
         <tr>
           <th>*</th>
@@ -65,10 +65,10 @@
 <!-- Templates for specific row -->
 <template name="channel">
   <tr>
-    <td>{{id}}</td>
+    <td id="channel-{{id}}">{{id}}</td>
     <td>
       <div class="ui fluid input">
-        <input type="text" value="{{name}}" placeholder="{{name}}" />
+        <input id="channel-name-{{id}}" type="edit" value="{{name}}" placeholder="{{name}}" />
       </div>
     </td>
   </tr>
@@ -77,15 +77,15 @@
 <template name="location">
   <tr>
     <td>{{editing}}</td>
-    <td>{{id}}</td>
+    <td id="location-{{id}}">{{id}}</td>
     <td>
       <div class="ui fluid input">
-        <input type="edit" value="{{name}}" placeholder="{{name}}" />
+        <input id="location-name-{{id}}" type="edit" value="{{name}}" placeholder="{{name}}" />
       </div>
     </td>
     <td>
       <div class="ui fluid input">
-        <input type="edit" value="{{location}}" placeholder="{{location}}" />
+        <input id="location-location-{{id}}" type="edit" value="{{location}}" placeholder="{{location}}" />
       </div>
     </td>
   </tr>

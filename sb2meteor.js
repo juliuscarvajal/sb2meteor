@@ -17,7 +17,8 @@ if (Meteor.isClient) {
   });
 
   Template.location.created = function () {
-    this.editing = new ReactiveVar('');
+    this.editing = new ReactiveVar;
+    this.editing.set('');
   };
 
   Template.location.helpers({
@@ -26,32 +27,40 @@ if (Meteor.isClient) {
     }
   });
 
+  var edit = null;
   Template.location.events = {
-    'blur': function (event, template) {
-      template.editing.set('');
-      //console.log(event.target);
-      //console.log('current value blur' + event.target.value);
-      EventStream.emit('blur', this.id, event.target.value);
+    'input': function (event, template) {
+      edit = template;
+      Streamy.broadcast('editing', {
+        data: ''
+      });
     },
-    'keypress': function (event, template) {
-      if (!template.editing.get()) {
-        template.editing.set('*');
-        EventStream.emit('editing', this.id);
-      }
-      //console.log(event.target);
-      //console.log('current value keypress' + event.target.value);
+    'change': function (event, template) {
+      template.editing.set('');
+      console.log('change');
+      Meteor.call('updateLocationName', this.id, event.target.value);
     }
   };
 
-  EventStream.on('blur', function (id, value) {
-    Meteor.call('updateLocationName', id, value);
+  Streamy.on('editing', function (data) {
+    //data.editing.set('Editing');
+    if (edit) {
+      edit.editing.set('Editing');
+      console.log('editing');
+    }
   });
 
-  //EventStream
+  /*
+  EventStream.on('editing', function (id) {
+    if (currentTemplate && currentTemplate.editing.get() === '') {
+      console.log('editing');
+      currentTemplate.editing.set('Editing');
+    }
+  });
+  */
 
   Meteor.methods({
     'updateLocationName': function (id, value) {
-      console.log('updateLocationName');
       var selection = Locations.filter(function (sel) {
         return sel.id === id;
       });
