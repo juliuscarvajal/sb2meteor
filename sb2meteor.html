@@ -7,9 +7,8 @@
 </head>
 
 <body>
-  {{> locations}} {{> channels}}
-
-  <h3>Locations to Channels</h3>
+  {{> allLocations}}
+  <h3>Locations to Channels</h3> {{> allChannels}}
   <!--
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
@@ -17,7 +16,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
 </body>
 
-<template name="locations">
+<template name="allLocations">
   <h3>Locations</h3>
   <p>
     <button class="btn btn-default" ng-click="sync()">Sync</button>
@@ -40,7 +39,7 @@
   </div>
 </template>
 
-<template name="channels">
+<template name="allChannels">
   <h3>Channels</h3>
   <p>
     <button class="btn btn-default" ng-click="sync()">Sync</button>

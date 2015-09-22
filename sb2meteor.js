@@ -1,63 +1,27 @@
-Locations = new MysqlSubscription('allLocations');
-Channels = new MysqlSubscription('allChannels');
-EventStream = new Meteor.Stream('events');
+Locations = new MysqlSubscription('locations');
+Channels = new MysqlSubscription('channels');
 
 if (Meteor.isClient) {
 
-  Template.channels.helpers({
+  Template.allChannels.helpers({
     Channels: function () {
       return Channels.reactive();
     }
   });
 
-  Template.locations.helpers({
+  Template.allLocations.helpers({
     Locations: function () {
       return Locations.reactive();
     }
   });
 
-  Template.location.created = function () {
-    this.editing = new ReactiveVar;
-    this.editing.set('');
-  };
-
-  Template.location.helpers({
-    editing: function () {
-      return Template.instance().editing.get();
-    }
-  });
-
   var edit = null;
   Template.location.events = {
-    'input': function (event, template) {
-      edit = template;
-      Streamy.broadcast('editing', {
-        data: ''
-      });
-    },
     'change': function (event, template) {
-      template.editing.set('');
       console.log('change');
       Meteor.call('updateLocationName', this.id, event.target.value);
     }
   };
-
-  Streamy.on('editing', function (data) {
-    //data.editing.set('Editing');
-    if (edit) {
-      edit.editing.set('Editing');
-      console.log('editing');
-    }
-  });
-
-  /*
-  EventStream.on('editing', function (id) {
-    if (currentTemplate && currentTemplate.editing.get() === '') {
-      console.log('editing');
-      currentTemplate.editing.set('Editing');
-    }
-  });
-  */
 
   Meteor.methods({
     'updateLocationName': function (id, value) {
@@ -74,6 +38,8 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    LiveMysql.LiveMysqlSelect.prototype.fetch = LiveMysql.LiveMysqlSelect.reactive;
+
     // code to run on server at startup
     var liveDb = new LiveMysql({
       host: 'localhost',
@@ -83,7 +49,7 @@ if (Meteor.isServer) {
       database: 'switchboard_2_api_poc'
     });
 
-    Meteor.publish('allChannels', function () {
+    Meteor.publish('channels', function () {
       return liveDb.select(
         'select * from channel', [{
           table: 'channel'
@@ -91,7 +57,7 @@ if (Meteor.isServer) {
       );
     });
 
-    Meteor.publish('allLocations', function () {
+    Meteor.publish('locations', function () {
       return liveDb.select(
         'select * from location', [{
           table: 'location'
@@ -104,6 +70,9 @@ if (Meteor.isServer) {
           'update location set location = ? where id = ?;', [value, id]
         );
       }
+    }, {
+      url: 'locations/:0',
+      httpMethod: 'put'
     });
   });
 
