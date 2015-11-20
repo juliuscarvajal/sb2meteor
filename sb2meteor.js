@@ -46,7 +46,7 @@ if (Meteor.isServer) {
       port: 3306,
       user: 'root',
       password: 'root',
-      database: 'switchboard_2_api_poc'
+      database: 'your_db'
     });
 
     Meteor.publish('channels', function () {
